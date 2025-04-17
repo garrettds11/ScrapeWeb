@@ -5,7 +5,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist": "electron-builder && npm run create-shortcut",
+    "create-shortcut": "node scripts/createShortcut.js"
   },
   "build": {
     "appId": "com.scrapeweb.app",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "electron": "^25.0.0",
-    "electron-builder": "^24.6.0"
+    "electron-builder": "^24.6.0",
+    "windows-shortcuts": "^0.1.6"
   }
 }
