@@ -1,0 +1,36 @@
+{
+  "name": "ScrapeWeb",
+  "version": "2.0.0-alpha.1",
+  "description": "Graphical web scraper for blogs, built with Electron and Puppeteer",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.scrapeweb.app",
+    "productName": "ScrapeWeb",
+    "copyright": "© 2025 Garrett Spear",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "scrapewebicon.ico",
+      "scrapeweb.png",
+      "xscrapeweb.png"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "scrapewebicon.ico",
+      "legalTrademarks": "ScrapeWeb™"
+    }
+  },
+  "dependencies": {
+    "puppeteer": "^22.8.2"
+  },
+  "devDependencies": {
+    "electron": "^25.0.0",
+    "electron-builder": "^24.6.0"
+  }
+}
