@@ -1,21 +1,40 @@
-## [1.2.0] - 2025-04-16
+# ScrapeWeb Release Notes
 
-### ✨ Added
-- New login flow with social auth support (Google, GitHub)
-- API endpoint `/v2/user/settings` with role-based access
+## Version 2.0.0 (2025-04-18)
 
-### 🛠️ Fixed
-- Issue where dark mode theme wasn't persisting after refresh
-- Fixed security vulnerability in password reset flow
+### New Features
+- **Persistent URL & Selector History**  
+  - Stores up to 10 past blog URLs and associated CSS selectors in `selectors.json`.  
+  - Auto-populates selectors when a known URL is selected.
+- **Dark Mode Toggle**  
+  - User-interface theme toggle with persisted preference.
+- **Options Menu Enhancements**  
+  - **Clear History**: Menu item to clear stored URLs and selectors.  
+  - **Open Debug Log**: Menu item to open the `error.log` debug file directly.
+- **“See Scrapes” Button Improvement**  
+  - Opens the configured output folder, appending `ScrapeWeb/scrapes` automatically.
 
-### 🧹 Changed
-- Updated dashboard UI with cleaner layout
-- Improved response time on `/search` endpoint
+### Improvements
+- **Menu Restoration**  
+  - Added Options to the application menu.
+- **Shortcut Creation**  
+  - Configured electron builder to place `ScrapeWeb.lnk` in the top-level `dist/win-unpacked` folder.
+- **Error Handling & Logging**  
+  - Enhanced logging to `error.log` in user data directory.
+  - Wrapped critical IPC and file operations with try/catch for resilience.
 
-### 🧪 Known Issues / Warnings
-- Safari support for drag-and-drop upload is still flaky
-- Beta features may have unexpected UI glitches
+### Bug Fixes
+- Fixed issue where URL and selector inputs read as `undefined`.
+- Corrected the path opened by “See Scrapes” button to use the selected output directory.
+- Resolved menu missing from `main.js` imports (`shell` and other modules).
+
+### Developer Notes
+- **File Structure**  
+  - `main.js`: Updated to include selector history handlers, menu items, and shell operations.  
+  - `index.html`: Revised UI elements, datalist for URL history, and persistence logic.  
+- **Build Configuration**  
+  - `package.json`: Adjusted `build.files` and `win` target for shortcuts.
 
 ---
-
-🔗 Full diff: [Compare v1.1.0...v1.2.0](https://your-repo-url/compare/v1.1.0...v1.2.0)
+*Thank you for using ScrapeWeb!*
+"""
