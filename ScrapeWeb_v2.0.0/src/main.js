@@ -153,7 +153,7 @@ ipcMain.handle('save-selector-history', async (event, { url, titleSelector, link
 
 ipcMain.handle('scrape', async (event, { url, titleSelector, linkSelector, outputFormat, outputDir }) => {
   const timestamp = new Date().toISOString().replace(/[:]/g, '-').split('.')[0];
-  const scrapeDir = path.join(outputDir || app.getPath('documents'), 'BlogScraper', 'scrapes', timestamp);
+  const scrapeDir = path.join(outputDir || app.getPath('documents'), 'ScraperWeb', 'scrapes', timestamp);
   fs.mkdirSync(scrapeDir, { recursive: true });
   let browser;
   try {

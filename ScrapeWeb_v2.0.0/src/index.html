@@ -53,7 +53,7 @@ input:focus, select:focus {
       flex: 1;
     }
     #status { margin-top: 20px; color: #6da168; white-space: pre-wrap; }
-    footer { margin-top: 30px; font-size: 0.8em; color: #555; text-align: center; }
+    footer { margin-top: 30px; font-size: 0.8em; color: #777; text-align: center; }
     footer a { color: #bbb; }
     #logo { width: 160px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
     
@@ -110,17 +110,17 @@ body.dark-mode select {
   
 
   <label for="url">Blog URL:</label>
-<input id="url" list="url-history" placeholder="https://news.ycombinator.com/">
+<input id="url" list="url-history" placeholder="https://thehackernews.com/">
 <datalist id="url-history"></datalist>
 
   <div class="flex-row">
     <div class="flex-col">
       <label for="titleSelector">Title CSS Selector:</label>
-      <input id="titleSelector" type="text" placeholder="span.titleline a">
+      <input id="titleSelector" type="text" placeholder="h2.home-title">
     </div>
     <div class="flex-col">
       <label for="linkSelector">Link CSS Selector:</label>
-      <input id="linkSelector" type="text" placeholder="a">
+      <input id="linkSelector" type="text" placeholder="a.story-link">
     </div>
   </div>
 
