@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 
 // Paths
 const userDataPath = app.getPath('userData');
-const logPath = path.join(userDataPath, 'error.log');
+const logPath = path.join(userDataPath, 'debug.log');
 const historyPath = path.join(userDataPath, 'selectors.json');
 
 // Logging setup
