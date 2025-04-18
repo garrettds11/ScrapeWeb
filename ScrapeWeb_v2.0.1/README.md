@@ -69,10 +69,10 @@ The resulting `.exe` will be created in the `dist/` folder.
 
 ## 💡 Example Selectors
 
-For [Splunk Threat Research Blog](https://www.splunk.com/en_us/blog/author/secmrkt-research.html):
+For [Hacker News Site](https://thehackernews.com/):
 
-- **Title Selector**: `a.headline h3.splunk2-h4`
-- **Link Selector**: `a.headline`
+- **Title Selector**: `h2.home-title`
+- **Link Selector**: `a.story-link`
 
 ---
 
@@ -81,16 +81,17 @@ For [Splunk Threat Research Blog](https://www.splunk.com/en_us/blog/author/secmr
 Markdown Output:
 
 ```markdown
-# Splunk Threat Research Team’s Blog
-**URL:** https://www.splunk.com/en_us/blog/author/secmrkt-research.html
+# The Hacker News | #1 Trusted Source for Cybersecurity News
+**URL:** https://thehackernews.com/
 **Author:** 
-**Last Updated:** 
-**Description:** 
+**Updated:** 
+**Desc:** The Hacker News is the top cybersecurity news platform, delivering real-time updates, threat intelligence, data breach reports, expert analysis, and actionable insights for infosec professionals and decision-makers.
 
 ## Posts
 
-1. [Sinister SQL Queries and How to Catch Them](https://...)
-2. [Infostealer Campaign against ISPs](https://...)
+1. [Chinese Smishing Kit Powers Widespread Toll Fraud Campaign Targeting U.S. Users in 8 States](https://thehackernews.com/2025/04/chinese-smishing-kit-behind-widespread.html)
+2. [SANS Institute Complimentary Cyber Bundle ($3240 Value) at SANSFIRE 2025](https://thehackernews.uk/sansfire-2025-ev)
+...
 ```
 
 JSON Output:
@@ -98,7 +99,7 @@ JSON Output:
 ```json
 {
   "url": "https://...",
-  "title": "Splunk Threat Research...",
+  "title": "The Hacker News...",
   "author": "",
   "description": "",
   "updated": "",

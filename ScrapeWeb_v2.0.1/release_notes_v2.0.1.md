@@ -1,6 +1,6 @@
 # ScrapeWeb Release Notes
 
-## Version 2.0.0 (2025-04-18)
+## Version 2.0.1 (2025-04-18)
 
 ### New Features
 - **Persistent URL & Selector History**  
@@ -10,7 +10,7 @@
   - User-interface theme toggle with persisted preference.
 - **Options Menu Enhancements**  
   - **Clear History**: Menu item to clear stored URLs and selectors.  
-  - **Open Debug Log**: Menu item to open the `error.log` debug file directly.
+  - **Open Debug Log**: Menu item to open the `debug.log` debug file directly.
 - **“See Scrapes” Button Improvement**  
   - Opens the configured output folder, appending `ScrapeWeb/scrapes` automatically.
 
