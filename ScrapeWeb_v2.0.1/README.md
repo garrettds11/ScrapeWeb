@@ -58,7 +58,7 @@ The resulting `.exe` will be created in the `dist/` folder.
 1. Launch ScrapeWeb
 2. Enter the blog page URL
 3. Input:
-   - **Title Selector** — the CSS selector for the blog post title (e.g., `.post-title`, `a.headline`)
+   - **Title Selector** — the CSS selector for the blog post title (e.g., `h2.home-title`, `a.story-link`)
    - **Link Selector** — the CSS selector for the anchor or link (e.g., `a`)
 4. Select output format: JSON, Markdown, or both
 5. Choose an output folder
