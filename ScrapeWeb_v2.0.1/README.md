@@ -90,7 +90,7 @@ Markdown Output:
 ## Posts
 
 1. [Chinese Smishing Kit Powers Widespread Toll Fraud Campaign Targeting U.S. Users in 8 States](https://thehackernews.com/2025/04/chinese-smishing-kit-behind-widespread.html)
-2. [SANS Institute Complimentary Cyber Bundle ($3240 Value) at SANSFIRE 2025](https://thehackernews.uk/sansfire-2025-ev)
+2. [Multi-Stage Malware Attack Uses .JSE and PowerShell to Deploy Agent Tesla and XLoader](https://thehackernews.com/2025/04/multi-stage-malware-attack-uses-jse-and.html)
 ...
 ```
 
