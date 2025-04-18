@@ -2,7 +2,11 @@
 
 ![ScrapeWeb Logo](scrapeweb.png)
 
-**ScrapeWeb** is a GUI-powered web scraper built with Electron and Puppeteer. It allows you to extract blog post titles and URLs using custom CSS selectors, then save the results in `.json`, `.md`, or both formats.
+**ScrapeWeb** is a GUI-based web scraper built with Electron and Puppeteer for Windows. It allows you to extract blog post titles and URLs using custom CSS selectors, then save the results in `.json`, `.md`, or both formats.
+
+---
+
+![A descriptive alt text](ScrapeWeb UI.png)
 
 ---
 
@@ -43,7 +47,7 @@ npm install
 npm start
 ```
 
-### Build a Portable Executable (Windows)
+### Build a Portable Executable
 
 ```bash
 npm run dist
