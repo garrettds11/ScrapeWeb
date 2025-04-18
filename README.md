@@ -6,7 +6,7 @@
 
 ---
 
-[Image of the ScrapeWeb application](ScrapeWeb UI.png)
+![Image of the ScrapeWeb application](ScrapeWeb UI.png)
 
 ---
 
