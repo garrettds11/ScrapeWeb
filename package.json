@@ -1,7 +1,7 @@
 {
   "name": "ScrapeWeb",
-  "version": "2.1.1",
-  "author": "Garrett Spear <youremail@example.com>",
+  "version": "2.1.2",
+  "author": "Garrett Spear",
   "description": "Graphical web scraper for blogs, built with Electron and Puppeteer",
   "main": "src/main.js",
   "scripts": {
