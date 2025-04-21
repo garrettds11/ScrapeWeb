@@ -1,5 +1,5 @@
 # Ignore built output and binaries
-dist
+app
 .exe
 
 # Ignore dependencies
