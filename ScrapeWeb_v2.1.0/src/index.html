@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ScrapeWeb</title>
+  <style>
+    body { 
+      font-family: 'Segoe UI', 'Inter', 'Roboto', sans-serif; 
+      padding: 20px; --focus-border: #3620b3 !important; --focus-shadow: rgba(80, 42, 168, 0.3) !important; }
+    label { 
+      display: block; 
+      margin-top: 10px; }
+    input, select {
+      width: 100%; 
+      padding: 10px; 
+      margin-top: 5px; 
+      border: 1px solid #ccc; 
+      border-radius: 6px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); 
+      font-size: 1em; 
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+      background-color: inherit; color: inherit; appearance: none; }
+    input:focus, select:focus { 
+      border-color: var(--focus-border); 
+      box-shadow: 0 0 0 2px var(--focus-shadow); 
+      outline: none; }
+    button { 
+      color: black; 
+      border: 1px solid #ccc; 
+      border-radius: 8px; 
+      padding: 10px 20px; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      transform: scale(1); }
+    button:hover { background-color: #f2f2f2; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
+      transform: scale(1.05); }
+    .flex-row { 
+      display: flex; 
+      gap: 2em; 
+      margin-top: 1em; }
+    .flex-col { 
+      flex: 1; }
+    #status { 
+      margin-top: 20px; 
+      color: #6da168; 
+      white-space: pre-wrap; }
+    footer { 
+      margin-top: 30px; 
+      font-size: 0.8em; 
+      color: #777; 
+      text-align: center; }
+    footer a { 
+      color: #bbb; }
+    #logo { 
+      width: 160px; 
+      margin: 0 auto 20px; 
+      display: block; }
+    select option:checked { 
+      background-color: #d78546; 
+      color: #fbf1c7; }
+    select option:hover { 
+      background-color: #83a598; 
+      color: #ffffff; }
+  </style>
+  <style>
+    body.dark-mode { 
+      background-color: #282828; 
+      color: #ebdbb2; --focus-border: #fbf1c7 !important; --focus-shadow: rgba(251,241,199,0.3) !important; }
+    body.dark-mode input, body.dark-mode select { 
+      background-color: #3c3836; 
+      color: #fbf1c7; 
+      border-color: #504945; }
+    body.dark-mode button { 
+      background-color: #879d91; 
+      color: #fff; 
+      border-color: #83a598; }
+    #darkToggle { 
+      position: absolute; 
+      top: 20px; 
+      right: 20px; 
+      padding: 5px 10px; 
+      border-radius: 6px; 
+      border: 1px solid #ccc; 
+      background: transparent; 
+      cursor: pointer; 
+      transition: all 0.2s ease; }
+    #darkToggle:hover { 
+      border-color: #999; 
+      box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+  </style>
+</head>
+<body>
+  <button id="darkToggle">Dark Mode</button>
+  <img id="logo" src="../xscrapeweb.png" alt="ScrapeWeb Logo" data-light="../xscrapeweb.png" data-dark="../scrapeweb.png">
+
+  <label for="url">Blog URL:</label>
+  <input id="url" list="url-history" placeholder="https://thehackernews.com/">
+  <datalist id="url-history"></datalist>
+
+  <p>Provide the CSS selectors for the title, link, and description elements.</p>
+
+  <div class="flex-row">
+    <div class="flex-col">
+      <label for="titleSelector">Title:</label>
+      <input id="titleSelector" type="text" placeholder="h2.home-title">
+    </div>
+    <div class="flex-col">
+      <label for="linkSelector">Link:</label>
+      <input id="linkSelector" type="text" placeholder="a.story-link">
+    </div>
+    <div class="flex-col">
+      <label for="descSelector"> Description (optional):</label>
+      <input id="descSelector" type="text" placeholder=".home-desc">
+    </div>
+  </div>
+
+  <label for="format">Output Format:</label>
+  <select id="format">
+    <option value="json">JSON</option>
+    <option value="md">Markdown</option>
+    <option value="html">HTML</option>
+    <option value="csv">CSV</option>
+  </select>
+
+  <label for="outputPath">Output Folder:</label>
+  <input id="outputPath" type="text" readonly>
+  <div style="margin-top: 1.5em; display: flex; justify-content: space-between;">
+    <div style="display: flex; gap: 1em;">
+      <button id="browseBtn">Browse</button>
+      <button id="openScrapes">See Scrapes</button>
+    </div>
+    <button id="scrapeBtn" style="background-color: #d02813; color: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 8px; transition: all 0.2s ease;">Scrape It</button>
+  </div>
+
+  <div id="status"></div>
+
+  <footer>
+    ScrapeWeb™ — Licensed under <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank">GPLv3</a>
+  </footer>
+
+  <script defer>
+    window.addEventListener('DOMContentLoaded', () => {
+    const urlInput = document.getElementById('url');
+    const titleInput = document.getElementById('titleSelector');
+    const linkInput = document.getElementById('linkSelector');
+    const descInput = document.getElementById('descSelector');
+    const urlHistory = document.getElementById('url-history');
+    const openBtn = document.getElementById('openScrapes');
+    const browseBtn = document.getElementById('browseBtn');
+    const scrapeBtn = document.getElementById('scrapeBtn');
+    const outputPathEl = document.getElementById('outputPath');
+    const statusEl = document.getElementById('status');
+
+    let pastUrls = JSON.parse(localStorage.getItem('scrapeUrls') || '[]');
+    let selectorMap = JSON.parse(localStorage.getItem('selectorMap') || '{}');
+
+    function refreshUrlDatalist() {
+      urlHistory.innerHTML = '';
+      pastUrls.forEach(u => { const opt = document.createElement('option'); opt.value = u; urlHistory.appendChild(opt); });
+    }
+
+    // Merge file-based selector history
+    window.api.getSelectorHistory().then(fileHistory => {
+      if (fileHistory) {
+        Object.entries(fileHistory).forEach(([url, sel]) => {
+          selectorMap[url] = { titleSelector: sel.titleSelector, linkSelector: sel.linkSelector, descSelector: sel.descSelector };
+          if (!pastUrls.includes(url)) pastUrls.push(url);
+        });
+        refreshUrlDatalist();
+      }
+    });
+
+    function saveState() { localStorage.setItem('scrapeUrls', JSON.stringify(pastUrls)); localStorage.setItem('selectorMap', JSON.stringify(selectorMap)); }
+    function addToHistory(u) { if (!u) return; const idx = pastUrls.indexOf(u); if (idx !== -1) pastUrls.splice(idx,1); pastUrls.unshift(u); if (pastUrls.length>1000) pastUrls.pop(); saveState(); refreshUrlDatalist(); }
+    function saveSelectorsForUrl(u, tSel, lSel, cSel) { if (!u) return; selectorMap[u] = { titleSelector: tSel, linkSelector: lSel, descSelector: cSel }; saveState(); }
+    function loadSelectorsForUrl(u) { const e = selectorMap[u]; if (e) { titleInput.value = e.titleSelector; linkInput.value = e.linkSelector; descInput.value = e.descSelector; } }
+
+    refreshUrlDatalist();
+    urlInput.addEventListener('change', () => loadSelectorsForUrl(urlInput.value.trim()));
+
+    browseBtn.addEventListener('click', async () => { 
+      console.log('Browse clicked');
+      const p = await window.api.selectFolder(); 
+      if (p) outputPathEl.value = p; 
+      console.log('Browse set to ' + p);
+    });
+
+    scrapeBtn.addEventListener('click', async () => {
+      console.log('Scrape clicked');
+      const url = urlInput.value.trim();
+      const tSel = titleInput.value.trim();
+      const lSel = linkInput.value.trim();
+      const cSel = descInput.value.trim();
+      const fmt = document.getElementById('format').value;
+      const dir = outputPathEl.value.trim();
+      if (!url || !tSel) return alert('Please enter a URL and a title selector');
+
+      statusEl.innerText = 'Scraping URL for blogs…';
+      try {
+        const scrapeDir = await window.api.scrape({ url, titleSelector: tSel, linkSelector: lSel, descSelector: cSel, outputFormat: fmt, outputDir: dir });
+        addToHistory(url);
+        saveSelectorsForUrl(url, tSel, lSel, cSel);
+        // Save selectors to file
+        await window.api.saveSelectorHistory({ url, titleSelector: tSel, linkSelector: lSel, descSelector: cSel });
+        statusEl.innerText = `✅ Scrape complete!\nOutput saved to:\n${scrapeDir}`;
+      } catch (err) {
+        statusEl.innerText = '❌ Error: ' + err.message;
+      }
+    });
+
+    openBtn.addEventListener('click', async () => {
+      console.log('See Scrapes clicked');
+      const dir = outputPathEl.value;
+      if (!dir) return alert('Please choose an output folder first.');
+      try { await window.api.openScrapesFolder(dir); } catch { alert('Could not open folder.'); }
+    });
+
+    window.api.onClearUrlHistory(() => {
+      pastUrls = [];
+      localStorage.removeItem('scrapeUrls');
+      refreshUrlDatalist();
+    });
+    
+  });
+  </script>
+
+  <!-- Theme toggle and logo switching logic -->
+  <script defer>
+    const toggleButton = document.getElementById('darkToggle');
+    const logo = document.getElementById('logo');
+    if (localStorage.getItem('theme') === 'dark') {
+      document.body.classList.add('dark-mode'); toggleButton.textContent = 'Light Mode'; logo.src = logo.dataset.dark;
+    }
+    toggleButton.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      toggleButton.textContent = isDark ? 'Light Mode' : 'Dark Mode'; logo.src = isDark ? logo.dataset.dark : logo.dataset.light;
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ const ws = require('windows-shortcuts');
 
 // adjust these to match your exe name:
 const exeName = 'ScrapeWeb.exe';
-const unpackedDir = path.join(__dirname, '..', 'dist', 'win-unpacked');
+const unpackedDir = path.join(__dirname, '..', 'app', 'win-unpacked');
 
 const target = path.join(unpackedDir, exeName);
 const link   = path.join(unpackedDir, '../../ScrapeWeb.lnk');

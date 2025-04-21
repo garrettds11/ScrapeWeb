@@ -49,7 +49,7 @@ npm start
 npm run dist
 ```
 
-The resulting `.exe` will be created in the `dist/` folder.
+The resulting `.exe` will be created in the `app/` folder.
 
 ---
 
