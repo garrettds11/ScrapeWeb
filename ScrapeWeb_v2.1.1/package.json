@@ -1,6 +1,6 @@
 {
   "name": "ScrapeWeb",
-  "version": "2.2.0-rc",
+  "version": "2.2.1",
   "author": "Garrett Spear <youremail@example.com>",
   "description": "Graphical web scraper for blogs, built with Electron and Puppeteer",
   "main": "src/main.js",
@@ -24,7 +24,16 @@
       "xscrapeweb.png"
     ],
     "win": {
-      "target": "portable",
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64","ia32"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64","ia32"]
+        }
+      ],
       "icon": "scrapewebicon.ico",
       "legalTrademarks": "ScrapeWeb™"
     },
