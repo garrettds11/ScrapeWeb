@@ -51,8 +51,8 @@
     "electron-updater": "^6.6.2"
   },
   "devDependencies": {
-    "electron": "^25.0.0",
-    "electron-builder": "^24.6.0",
+    "electron": "^25.9.8",
+    "electron-builder": "^24.13.3",
     "windows-shortcuts": "^0.1.6"
     
   }
