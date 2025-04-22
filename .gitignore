@@ -2,6 +2,7 @@
 app
 .exe
 .lnk
+*.bak
 
 # Ignore dependencies
 node_modules

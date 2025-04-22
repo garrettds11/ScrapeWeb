@@ -42,7 +42,8 @@
         "provider": "github",
         "owner": "garrettds11",
         "repo": "ScrapeWeb",
-        "private": false
+        "private": false,
+        "releaseType": "release"
       }
     ]
   },
