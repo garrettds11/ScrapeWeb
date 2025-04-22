@@ -1,29 +1,39 @@
 name: Build & Release ScrapeWeb
 
-# Run whenever you push a semver tag, e.g. v2.1.2
+# Trigger on any new git tag like v2.2.1
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v2.1.1'
+
+# Make your PAT available to electron-builder
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-and-publish:
+    # Windows runner so we can build the portable EXE/ZIP natively
     runs-on: windows-latest
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      # 1) Get the code at the tagged commit
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2) Install Node.js (v20 to match local dev)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
           cache: 'npm'
 
+      # 3) Install dependencies
       - name: Install dependencies
         run: npm ci
 
+      # 4) Build & publish
+      #    `npm run dist` runs electron-builder and your create-shortcut script
+      #    `--publish always` tells it to push assets (ZIP/portable EXE + latest.yml)
+      #     into the GitHub Release matching the tag (you’ve set up in package.json)
       - name: Build & Publish Release
         run: npm run dist -- --publish always
