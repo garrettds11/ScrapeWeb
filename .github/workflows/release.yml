@@ -1,5 +1,9 @@
 name: Build & Release ScrapeWeb
 
+# Tell GH to give us write access to contents so we can create/releases/assets
+permissions:
+  contents: write
+
 # Trigger on any new git tag like v2.2.1
 on:
   push:
