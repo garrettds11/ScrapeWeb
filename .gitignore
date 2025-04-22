@@ -1,6 +1,7 @@
 # Ignore built output and binaries
 app
 .exe
+.lnk
 
 # Ignore dependencies
 node_modules
