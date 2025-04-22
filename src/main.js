@@ -1,8 +1,8 @@
-const { app, BrowserWindow, ipcMain, dialog, shell, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell, Menu, net } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
-const { autoUpdater } = require('electron-updater');
+const semver = require('semver');
 
 // Paths for user data
 const userDataPath = app.getPath('userData');
@@ -54,96 +54,63 @@ function createWindow() {
   log('Window created and index.html loaded.');
 }
 
-// ─── REGISTER AUTO-UPDATER HANDLERS ─────────────────────────────────────────
-try {
-  autoUpdater.on('checking-for-update', () => {
-    try {
-      log('autoUpdater → checking-for-update');
-      if (mainWindow) {
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'ScrapeWeb Update',
-          message: 'Checking for updates…'
-        });
+// ─── Query GitHub Releases API; compare tag to app version; prompt to download. ─────────────────────────────────────────
+async function checkGitHubUpdates() {
+  log('Checking GitHub release tags @ https://api.github.com/repos/garrettds11/ScrapeWeb/releases/latest');
+  const request = net.request({
+    method: 'GET',
+    protocol: 'https:',
+    hostname: 'api.github.com',
+    path: '/repos/garrettds11/ScrapeWeb/releases/latest',
+    headers: { 'User-Agent': 'ScrapeWeb-Updater' }
+  });
+
+  let body = '';
+  request.on('response', res => {
+    res.on('data', chunk => { body += chunk; });
+    res.on('end', () => {
+      try {
+        const release = JSON.parse(body);
+        const latest = release.tag_name.replace(/^v/, '');
+        const current = app.getVersion();
+
+          log(`Latest version release tag: v${latest}`);
+          log(`Running app version: ${current}`);
+
+          // if nothing newer, bail out silently
+          if (!semver.gt(latest, current)) {
+            return;
+          }
+        
+          // only runs when an update *is* available
+          const downloadUrl =
+            (release.assets.find(a => a.name.endsWith('.zip')) || {}).browser_download_url
+            || release.html_url;
+        
+          dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            title: 'Update Available',
+            message: `A new version (${latest}) is available!`,
+            detail: `You are running ${current}.\nDownload it now?`,
+            buttons: ['Download', 'Later']
+          })
+          .then(({ response }) => {
+            if (response === 0 && downloadUrl) {
+              log(`User chose to download update; downloading ${release.html_url} from ${downloadUrl}`);
+              shell.openExternal(downloadUrl);
+            }
+          });
+      } catch (e) {
+        log('Failed to check GitHub release tags @ https://api.github.com/repos/garrettds11/ScrapeWeb/releases/latest ' + e);
+        console.error('Latest release check failed:', e);
       }
-    } catch (e) {
-      log('Handler [checking-for-update] failed: ' + e);
-    }
-  });
-
-  autoUpdater.on('update-available', info => {
-    try {
-      log('autoUpdater → update-available (v' + info.version + ')');
-      if (mainWindow) {
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'Update Available',
-          message: 'Version ' + info.version + ' is available — downloading now.'
-        });
-      }
-    } catch (e) {
-      log('Handler [update-available] failed: ' + e);
-    }
-  });
-
-  autoUpdater.on('update-not-available', () => {
-    try {
-      log('autoUpdater → update-not-available');
-      if (mainWindow) {
-        dialog.showMessageBox(mainWindow, {
-          type: 'info',
-          title: 'No Updates',
-          message: '✅ You’re running the latest version of ScrapeWeb.'
-        });
-      }
-    } catch (e) {
-      log('Handler [update-not-available] failed: ' + e);
-    }
-  });
-
-  autoUpdater.on('download-progress', progress => {
-    try {
-      const p = Math.round(progress.percent);
-      log('autoUpdater → download-progress ' + p + '%');
-    } catch (e) {
-      log('Handler [download-progress] failed: ' + e);
-    }
-  });
-
-  autoUpdater.on('update-downloaded', info => {
-    log('autoUpdater → update-downloaded (v' + info.version + ')');
-    dialog.showMessageBox(mainWindow, {
-      type: 'info',
-      title: 'Update Ready',
-      message: 'v' + info.version + ' downloaded — application restart needed to install?',
-      buttons: ['Restart Now', 'Later']
-    }).then(({ response }) => {
-      log('User responded to restart prompt: ' + (response === 0 ? 'Restart' : 'Later'));
-      if (response === 0) autoUpdater.quitAndInstall();
-    }).catch(e => {
-      log('Handler [update-downloaded] dialog failed: ' + e);
     });
   });
-
-  autoUpdater.on('error', err => {
-    try {
-      const errMsg = err ? (err.stack || err.toString()) : 'unknown';
-      log('autoUpdater → error: ' + errMsg);
-      if (mainWindow) {
-        dialog.showMessageBox(mainWindow, {
-          type: 'error',
-          title: 'Update Error',
-          message: errMsg
-        });
-      }
-    } catch (e) {
-      log('Handler [error] failed: ' + e);
-    }
+  request.on('error', err => {
+    log('Network error checking updates: ' + err);
+    console.error('Network error checking updates:', err);
   });
-
-  log('autoUpdater event handlers registered');
-} catch (e) {
-  log('Failed to register autoUpdater handlers: ' + e);
+  request.end();
 }
 
 // ─── SINGLE READY BLOCK ───────────────────────────────────────────────────────
@@ -209,7 +176,7 @@ app.whenReady().then(() => {
           click: () => {
             try {
               log('User invoked manual update check');
-              autoUpdater.checkForUpdates();
+              checkGitHubUpdates();
             } catch (e) {
               log('Manual checkForUpdates() failed: ' + e);
             }
@@ -246,10 +213,10 @@ app.whenReady().then(() => {
 
   // 3) Kick off auto-updates
   try {
-    autoUpdater.checkForUpdatesAndNotify();
-    log('Called autoUpdater.checkForUpdatesAndNotify()');
+    checkGitHubUpdates();
+    log('Called checkGitHubUpdates()');
   } catch (e) {
-    log('checkForUpdatesAndNotify() failed: ' + e);
+    log('checkGitHubUpdates() failed: ' + e);
   }
 });
 
