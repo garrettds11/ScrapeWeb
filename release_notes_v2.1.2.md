@@ -1,7 +1,7 @@
-# ScrapeWeb v2.1.1 Release Notes
+# ScrapeWeb v2.1.2 Release Notes
 
 ## Versioning & Release Management
-- **Bumped to v2.1.1** (patch bump for the updater bug fix)
+- **Bumped to v2.1.2** (patch bump for the updater bug fix and git release)
 - **Flattened repo structure** so all source files (`package.json`, `package-lock.json`, `src/`, `scripts/`, `.github/`) live at the root—no more nested version folders
 - **Build targets updated** in `package.json`:
   - `portable` EXE for Windows  
