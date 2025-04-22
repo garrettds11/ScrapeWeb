@@ -4,7 +4,7 @@ name: Build & Release ScrapeWeb
 on:
   push:
     tags:
-      - 'v2.1.1'
+      - 'v*.*.*'
 
 # Make your PAT available to electron-builder
 env:
