@@ -1,6 +1,6 @@
 {
   "name": "ScrapeWeb",
-  "version": "2.1.3",
+  "version": "2.2.3",
   "author": "Garrett Spear",
   "description": "Graphical web scraper for blogs, built with Electron and Puppeteer",
   "main": "src/main.js",
