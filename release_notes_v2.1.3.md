@@ -1,35 +1,33 @@
-# ScrapeWeb v2.1.2 Release Notes
+# ScrapeWeb v2.1.3 Release Notes
 
 ## Versioning & Release Management
-- **Bumped to v2.1.2** (patch bump for the updater bug fix and git release)
-- **Flattened repo structure** so all source files (`package.json`, `package-lock.json`, `src/`, `scripts/`, `.github/`) live at the root—no more nested version folders
+- **Bumped to v2.1.3** (patch bump for the updater bug fix and git release)
 - **Build targets updated** in `package.json`:
   - `portable` EXE for Windows  
   - `zip` archives for both x64 and ia32
-- **Publish block** in `package.json` points at your GitHub repo (`owner: garrettds11`, `repo: ScrapeWeb`) so `electron-builder --publish always` uploads artifacts and `latest.yml` to Releases
+- **Publish block** in `package.json` points at your GitHub repo (`owner: garrettds11`, `repo: ScrapeWeb`) so `electron-builder --publish always` uploads assets to Releases
 
 ## CI/CD Workflow
 - **`.github/workflows/release.yml`** added:
-  - Triggers on any tag `v*.*.*` (now including `v2.1.1`)
+  - Triggers on any tag `v*.*.*` (now including `v2.1.3`)
   - Runs on `windows-latest`
   - Steps: checkout → setup-node (with lockfile caching) → `npm ci` → `npm run dist -- --publish always`
 - **`GH_TOKEN`** injected as a repo secret for authenticated release publishing
-- **Release notes** file (`release_notes_v2.1.1.md`) now lives at root and is integrated into the Release body
+- **Release notes** archive available in `archive` with release notes (`release_notes_vX.X.X.md`) integrated into the Release body
 
 ## Build & Shortcut
 - **`dist` script** in `package.json` runs `electron-builder` then `scripts/createShortcut.js` to place desktop/start-menu shortcuts
-- **Output directory** changed from `dist/` to `app/` for clarity
+- **Output directory** is `app/`
 
-## Auto‑Update Support
-- **electron-updater** upgraded to `^6.6.2`
+## Prompted‑Update Support
 - All standard events wired with dialogs and logs:
   - `checking-for-update` (with “Checking…” info box)
   - `update-available` / `update-not-available` (status + dialogs)
-  - `download-progress` (console/log only)
+  - `download` (console/log only)
   - `update-downloaded` (restart now vs later prompt)
   - `error` (error box + log)
 - **“Check for Updates”** menu item under **Help**
-- **Portable** builds still ship `latest.yml` and can auto‑update via a generic or GitHub feed
+- **Portable** builds still check for updates via a generic or GitHub feed
 
 ## Error Handling & Logging
 - **App‑wide** `uncaughtException` and `unhandledRejection` handlers log to `debug.log` and show an error dialog
